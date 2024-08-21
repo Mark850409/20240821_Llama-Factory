@@ -1,36 +1,44 @@
-# LLAMA-Factory建立自己的語言模型
+# 1. LLAMA-Factory建立自己的語言模型
 
-## 1. 簡介
+## 1.1. 簡介
 
 快速部署LLAMA-Factory，客製化屬於自己的語言模型
 
-## 2. 目錄
+## 1.2. 目錄
 
-- [LLAMA-Factory建立自己的語言模型](#llama-factory建立自己的語言模型)
-  - [1. 簡介](#1-簡介)
-  - [2. 目錄](#2-目錄)
-  - [3. 操作步驟](#3-操作步驟)
-  - [4. 使用git專案進行安裝](#4-使用git專案進行安裝)
-  - [5. 導入訓練資料集](#5-導入訓練資料集)
-    - [5.1. 數據集導入方式1 - JSON檔](#51-數據集導入方式1---json檔)
-    - [5.2. 數據集導入方式2 - 直接讀取 Hugging Face](#52-數據集導入方式2---直接讀取-hugging-face)
-  - [配置數據集](#配置數據集)
-    - [使用Alpaca 格式](#使用alpaca-格式)
-    - [使用OpenAI 格式](#使用openai-格式)
-    - [Alpaca 數據集內容](#alpaca-數據集內容)
-    - [OpenAI 數據集內容](#openai-數據集內容)
-  - [模型訓練開始](#模型訓練開始)
-    - [如何登入 Hugging Face](#如何登入-hugging-face)
-    - [數據集預覽](#數據集預覽)
-    - [模型參數配置](#模型參數配置)
-  - [使用docker進行安裝](#使用docker進行安裝)
-  - [完成畫面](#完成畫面)
-  - [參考資料](#參考資料)
+- [1. LLAMA-Factory建立自己的語言模型](#1-llama-factory建立自己的語言模型)
+  - [1.1. 簡介](#11-簡介)
+  - [1.2. 目錄](#12-目錄)
+  - [1.3. 操作步驟](#13-操作步驟)
+    - [1.3.1. 使用git專案進行安裝](#131-使用git專案進行安裝)
+    - [1.3.2. 使用docker進行安裝](#132-使用docker進行安裝)
+  - [1.4. 導入訓練資料集](#14-導入訓練資料集)
+    - [1.4.1. 數據集導入方式1 - JSON檔](#141-數據集導入方式1---json檔)
+    - [1.4.2. 數據集導入方式2 - 直接讀取 Hugging Face](#142-數據集導入方式2---直接讀取-hugging-face)
+  - [1.5. 製作數據集](#15-製作數據集)
+    - [1.5.1. 使用python批次資料轉換腳本](#151-使用python批次資料轉換腳本)
+    - [1.5.2. 使用CHATGPT製作數據集](#152-使用chatgpt製作數據集)
+      - [1.5.2.1. 生成Alpaca格式數據集](#1521-生成alpaca格式數據集)
+      - [1.5.2.2. 生成open ai格式數據集](#1522-生成open-ai格式數據集)
+  - [1.6. 配置數據集](#16-配置數據集)
+    - [1.6.1. 請在`dataset_info.json`設定](#161-請在dataset_infojson設定)
+  - [1.7. 數據集範例對照](#17-數據集範例對照)
+    - [1.7.1. Alpaca 數據集內容](#171-alpaca-數據集內容)
+    - [1.7.2. OpenAI 數據集內容](#172-openai-數據集內容)
+  - [1.8. 模型訓練開始](#18-模型訓練開始)
+    - [1.8.1. 地端訓練模型](#181-地端訓練模型)
+      - [1.8.1.1. 如何登入 Hugging Face](#1811-如何登入-hugging-face)
+      - [1.8.1.2. 數據集預覽](#1812-數據集預覽)
+      - [1.8.1.3. 模型參數配置](#1813-模型參數配置)
+      - [1.8.1.4. 使用多卡訓練](#1814-使用多卡訓練)
+    - [1.8.2. Colab PRO 訓練模型](#182-colab-pro-訓練模型)
+  - [1.9. 完成畫面](#19-完成畫面)
+  - [1.10. 參考資料](#110-參考資料)
+  - [1.11. 常見問題](#111-常見問題)
 
+## 1.3. 操作步驟
 
-## 3. 操作步驟
-
-## 4. 使用git專案進行安裝
+### 1.3.1. 使用git專案進行安裝
 
 git clone指令，下載LLAMA-Factory到自己的本機
 
@@ -74,7 +82,7 @@ print("CUDA device count:", torch.cuda.device_count())
 print("Current CUDA device:", torch.cuda.current_device())
 ```
 
-![](https://markweb.idv.tw/uploads/202408192055574.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192055574.png)
 
 最後則是 bitsandbytes 函式庫，Windows 系統上需要安裝預編譯的函式庫。如果是 Linux 系統，則是只需要輸入 `pip install bitsandbytes>=0.39.0` 即可
 
@@ -101,7 +109,7 @@ cd C:\WorkSpace\LLaMA-Factory\LLaMA-Factory
 python .\src\webui.py
 ```
 
-![](https://markweb.idv.tw/uploads/202408181847482.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181847482.png)
 
 >[!note] 小提示
 >如果希望webui可以吃顯卡效能，請用下列這種方式啟動
@@ -111,8 +119,80 @@ python .\src\webui.py
 SET CUDA_VISIBLE_DEVICES=0,1 && python src\webui.py
 ```
 
-<!--more-->
-## 5. 導入訓練資料集
+
+### 1.3.2. 使用docker進行安裝
+
+```Dockerfile
+FROM nvcr.io/nvidia/pytorch:24.01-py3
+
+WORKDIR /app
+
+COPY requirements.txt /app/
+RUN pip install -r requirements.txt
+
+COPY . /app/
+RUN pip install -e .[deepspeed,metrics,bitsandbytes,qwen]
+
+EXPOSE 7860
+
+# 設定啟動指令來運行 src/webui.py
+CMD ["python", "src/webui.py"]
+```
+
+
+```yaml
+version: '3.8'
+
+services:
+  llama-factory:
+    image: llama-factory:v0.00 # 修改为编译出来的 docker image 名称/版本
+    container_name: llama_factory # container 名称
+    volumes:
+      - C:\WorkSpace\LLaMA-Factory\LLaMA-Factory\huggingface:/root/.cache/huggingface/
+      - C:\WorkSpace\LLaMA-Factory\LLaMA-Factory\data:/app/data
+      - C:\WorkSpace\LLaMA-Factory\LLaMA-Factory\output:/app/output
+      - C:\WorkSpace\LLaMA-Factory\LLaMA-Factory\models:/app/models # 映射自己的models目录
+      - C:\WorkSpace\LLaMA-Factory\LLaMA-Factory:/app # 映射自己的models目录
+    environment:
+      - CUDA_VISIBLE_DEVICES=0,1
+      - GRADIO_SERVER_PORT=7864 # webui跑在7864端口上，7860被comfyui占用了
+    ports:
+      - "7864:7864" # webui跑在7864端口上，7860被comfyui占用了
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: "all"
+            capabilities: [gpu]
+    restart: unless-stopped
+```
+
+
+部署Dockerfile
+
+```bash
+docker build -t llama-factory:v0.00 .
+```
+
+>[!note] 小提示
+>因為有安裝pytorch深度學習套件，因此打包較久屬於正常現象
+
+
+```bash
+docker-compose up -d
+```
+
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408191947809.png)
+
+此時，回到Windows的docker desktop，可以看到`llama-factory`已正常啟動
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408191949088.png)
+
+
+## 1.4. 導入訓練資料集
 
 作者在專案的 `data` 資料夾內有提供[資料集的格式](https://github.com/hiyouga/LLaMA-Factory/blob/main/data/README_zh.md)，我們需要按照這個格式，才能讓我們自己準備的訓練資料，能夠被用來訓練。
 
@@ -121,7 +201,7 @@ SET CUDA_VISIBLE_DEVICES=0,1 && python src\webui.py
 > 因為我不確定其他資料集要怎麼用，就還是照網站上說得先用Alpaca 格式
 
 
-### 5.1. 數據集導入方式1 - JSON檔
+### 1.4.1. 數據集導入方式1 - JSON檔
 
 ```
 "資料集名稱": {
@@ -135,7 +215,7 @@ SET CUDA_VISIBLE_DEVICES=0,1 && python src\webui.py
 ```
 
 
-### 5.2. 數據集導入方式2 - 直接讀取 Hugging Face
+### 1.4.2. 數據集導入方式2 - 直接讀取 Hugging Face
 
 ```
 "資料集名稱":{
@@ -153,14 +233,10 @@ SET CUDA_VISIBLE_DEVICES=0,1 && python src\webui.py
 
 ```
 
+## 1.5. 製作數據集
+### 1.5.1. 使用python批次資料轉換腳本
 
->[!note] 小提示
-> * 資料好多，有word、excel、csv、txt....等格式要如何批次做轉換呢?
-
-
-
-```python
-## 撰寫python批次腳本
+撰寫python批次腳本
 
 ```python
 import json
@@ -238,8 +314,8 @@ if __name__ == "__main__":
     
     convert_files_to_dataset(args.input_dir, args.output_file)
     print(f"轉換完成。Alpaca格式的數據集已保存到 {args.output_file}")
+    
 ```
-
 
 使用方式
 
@@ -247,12 +323,7 @@ if __name__ == "__main__":
 python excel_to_dataset.py . mistral_dataset.json
 ```
 
->[!note] 參數定義
-> * 第一個傳入參數是檔案名稱
-> * 第二個參數是輸出的json檔案名稱
-
-
-![](https://markweb.idv.tw/uploads/202408181913296.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181913296.png)
 
 輸出的格式如下
 
@@ -289,12 +360,9 @@ python excel_to_dataset.py . mistral_dataset.json
   },
 ```
 
-## 配置數據集
+### 1.5.2. 使用CHATGPT製作數據集
 
-
->[!note] 如何產生指定格式數據集
-> * 開啟CHATGPT
-> * 輸入如下提示詞
+#### 1.5.2.1. 生成Alpaca格式數據集
 
 ```json
 請依照上面的excel，幫我調整為這樣的數據集格式，並全部都使用繁體中文 
@@ -308,9 +376,9 @@ python excel_to_dataset.py . mistral_dataset.json
 "
 你現在是一位經驗豐富的塔羅牌師，擁有數十年的解牌經驗和深厚的直覺洞察力。請仔細查看附加的CSV檔案，其中包含100個不同的牌組（Spread Card Composition）。 你的任務是： 1. 仔細閱讀每個牌組中塔羅牌的名稱，以及欄位 Spread Card Composition其正位和逆位的含義。 2. 針對"Overall Love Spread Meaning"欄位，運用你豐富的塔羅經驗和洞察力，重新進行深入解讀。這個解讀應該： - 超越原文的表面含義，挖掘更深層的洞見 - 融入你作為資深塔羅牌師的獨特見解 - 加入原文未提及但相關的解說，豐富整體解讀 - 考慮牌陣中各張牌之間的相互關係和能量流動 - 提供更具體、實用的建議給尋求指引的人 3. 從Combination Number 3530025開始，依次解讀至3530050，共25組牌陣。 4. 每組解讀應包含： - 牌陣編號(註明) - 牌組組成(註明) - 你的詳細解讀（包含實用的建議與解讀共約200字,共分2段解讀與建議） 5. 在解讀時，請考慮以下幾點： - 牌陣中各張牌的位置和相互關係 - 正逆位的影響 - 實用的建議(與牌面相近要有意思區隔的建議)或行動指南 6.文字呈現範例如下,請依照此格式輸出   牌陣編號: 3530001 牌組組成: 權杖八 (正位)、寶劍八 (逆位)、寶劍王后 (正位) 詳細解讀： 權杖八的正位顯示你目前的感情狀態充滿了快速且正面的變化，這與寶劍八逆位的釋放束縛相呼應，暗示著你們正在或即將從一段困境中解脫。這兩張牌共同表示你們的關係將由束縛中解放，進而進入更自由、開明的階段。寶劍王后的理智與洞察力將在這過程中起到關鍵作用，使你們能在情感上更加成熟和理性。 建議與指引： 建議你們利用這段契機重新審視彼此的需求與目標，並以開放的態度迎接新的開始。實際上，權杖八暗示旅行或變化，或許也可以考慮來一段假期，讓雙方有更多時間感受彼此的存在。寶劍王后提醒你們在溝通中要保持冷靜和理智，並互相尊重對方的意見。 請以溫和、富有洞察力且鼓舞人心的語調進行解讀，就像你正在為一位真實的來訪者進行面對面的塔羅占卜。 現在，請開始你的解讀。謝謝。
 "
-
 ```
 
+#### 1.5.2.2. 生成open ai格式數據集
 
 ```json
 請將上面的格式調整為open ai數據集格式，
@@ -318,24 +386,25 @@ python excel_to_dataset.py . mistral_dataset.json
 
 請注意，格式應該符合以下：
 [ 
-	{ 
-		"messages": [ 
-			{ "role": "system", "content": "系统提示词（选填）" }, 
-			{ "role": "user", "content": "人类指令" }, 
-			{ "role": "assistant", "content": "模型回答" } 
-		] 
-	}
+  { 
+    "messages": [ 
+      { "role": "system", "content": "系统提示词（选填）" }, 
+      { "role": "user", "content": "人类指令" }, 
+      { "role": "assistant", "content": "模型回答" } 
+    ] 
+  }
 ] 
 1. 系統提示詞請放在role為system的content
 2. 其他才是人類指令和模型回答
 ```
 
 
-* 請將輸出的`mistral_dataset.json`複製到`C:\WorkSpace\LLaMA-Factory\LLaMA-Factory\data`目錄下
-* 請在`C:\WorkSpace\LLaMA-Factory\LLaMA-Factory\data`目錄下，找到`dataset_info.json`，加入以下片段
-* 請依據實際情況調整你需要的格式
-### 使用Alpaca 格式
+## 1.6. 配置數據集
 
+### 1.6.1. 請在`dataset_info.json`設定
+
+ 使用Alpaca 格式
+ 
 ```json
 "myDataset": {
   "file_name": "mistral_dataset.json",
@@ -346,7 +415,8 @@ python excel_to_dataset.py . mistral_dataset.json
   }
 },
 ```
-### 使用OpenAI 格式
+ 
+ 使用OpenAI 格式
 
 ```json
   "myDataset": {
@@ -366,7 +436,9 @@ python excel_to_dataset.py . mistral_dataset.json
 ```
 
 
-### Alpaca 數據集內容
+## 1.7. 數據集範例對照
+
+### 1.7.1. Alpaca 數據集內容
 
 範例格式
 
@@ -408,7 +480,7 @@ python excel_to_dataset.py . mistral_dataset.json
 ```
 
 
-### OpenAI 數據集內容
+### 1.7.2. OpenAI 數據集內容
 
 範例格式
 
@@ -458,44 +530,46 @@ python excel_to_dataset.py . mistral_dataset.json
 ```
 
 
-## 模型訓練開始
+## 1.8. 模型訓練開始
 
-
-### 如何登入 Hugging Face
+### 1.8.1. 地端訓練模型
+ 
+#### 1.8.1.1. 如何登入 Hugging Face
 
 
 請先到Hugging Face註冊一個帳號
 
-![](https://markweb.idv.tw/uploads/202408192100056.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192100056.png)
 
-![](https://markweb.idv.tw/uploads/202408192104771.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192104771.png)
 
 >[!note] 參數設定
 >* 請輸入一個`token name`
 >* `permission`我目前都全開
 >* 請注意點擊`Create token`時一定要將token保存下來，因為`畫面關掉`就`不會再出現`了，想要再取得token就要`重新生成`
 
-![](https://markweb.idv.tw/uploads/202408192103625.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192103625.png)
 
 將你的token貼上，接著出現尋問提示，輸入`Y`，這樣就添加成功了!!!
 
-### 數據集預覽
+#### 1.8.1.2. 數據集預覽
+
 若數據集配置正確，這邊要可以選擇
 
-![](https://markweb.idv.tw/uploads/202408181925260.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181925260.png)
 
 
 點擊預覽數據集，可以預覽目前dataset的資料
 
-![](https://markweb.idv.tw/uploads/202408181926765.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181926765.png)
 
 
 >[!error] 訓練時出現RuntimeError: unmatched '}' in format string
->目前這個方案無解，請改用docker方式部署再來訓練
+>目前這個方案無解，請改用`docker`方式部署再來訓練
 
-### 模型參數配置
+#### 1.8.1.3. 模型參數配置
 
-![](https://markweb.idv.tw/uploads/202408191952796.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408191952796.png)
 
 * 語言：請選擇`zh`
 * 模型名稱：這邊請選擇你要拿來當`基底的模型名稱`
@@ -506,116 +580,138 @@ python excel_to_dataset.py . mistral_dataset.json
 * 計算類型：訓練時發現`bf16`會出錯，似乎是顯卡不支援這種精度，請選`fp16`或`fp32`
 
 
-![](https://markweb.idv.tw/uploads/202408191958425.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408191958425.png)
 
 預覽命令
 
 喜歡打指令的高手，可以點擊`預覽命令`，將這段腳本貼到cmd執行
-![](https://markweb.idv.tw/uploads/202408192000410.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192000410.png)
 
 保存訓練參數
 
 會將訓練參數保存，下次就不用重新設定
 
-![](https://markweb.idv.tw/uploads/202408192002251.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192002251.png)
 
 載入訓練參數
 
-![](https://markweb.idv.tw/uploads/202408192003333.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192003333.png)
 
 
 開始訓練參數
 
 點擊開始訓練會出現訓練進度條
 
-![](https://markweb.idv.tw/uploads/202408192004524.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192004524.png)
 
 
-![](https://markweb.idv.tw/uploads/202408192005767.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192005767.png)
 
 
-![](https://markweb.idv.tw/uploads/202408192005458.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192005458.png)
 
 
-![](https://markweb.idv.tw/uploads/202408192006839.png)
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192006839.png)
 
-## 使用docker進行安裝
+#### 1.8.1.4. 使用多卡訓練
 
-```Dockerfile
-FROM nvcr.io/nvidia/pytorch:24.01-py3
+請開啟webui介面，調整好超參數後，點擊`預覽命令`生成指令
 
-WORKDIR /app
+>[!note] 參數設定
+> * 要改掉的只有`第一行`，請加上accelerate launch --config_file default_config.yaml src/train.py
+> * yaml檔請將`gpu_ids: 1,3`改成實際顯卡的ID，例如我這邊設`0,1`
 
-COPY requirements.txt /app/
-RUN pip install -r requirements.txt
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408212112995.png)
 
-COPY . /app/
-RUN pip install -e .[deepspeed,metrics,bitsandbytes,qwen]
-
-EXPOSE 7860
-
-# 設定啟動指令來運行 src/webui.py
-CMD ["python", "src/webui.py"]
+```
+accelerate launch --config_file default_config.yaml src/train.py \
+  --stage sft \
+    --do_train True \
+    --model_name_or_path usamakenway/llama2-7b-hf-chat-small \
+    --preprocessing_num_workers 16 \
+    --finetuning_type lora \
+    --template llama3 \
+    --flash_attn auto \
+    --dataset_dir data \
+    --dataset myDataset \
+    --cutoff_len 128  \
+    --learning_rate 2e-05 \
+    --num_train_epochs 0.5 \
+    --max_samples 100 \
+    --per_device_train_batch_size 1 \
+    --gradient_accumulation_steps 32 \
+    --lr_scheduler_type cosine \
+    --max_grad_norm 1.0 \
+    --logging_steps 20 \
+    --save_steps 500 \
+    --warmup_steps 0 \
+    --optim adamw_torch \
+    --packing False \
+    --report_to none \
+    --output_dir saves/mistral-7b-bnb-4bit/lora/train_2024-08-20-05-04-08 \
+    --fp16 True \
+    --plot_loss True \
+    --ddp_timeout 300 \
+    --include_num_input_tokens_seen True \
+    --quantization_bit 4 \
+    --quantization_method bitsandbytes \
+    --lora_rank 1 \
+    --lora_alpha 8 \
+    --lora_dropout 0 \
+    --lora_target all \
+    --val_size 0.01 \
+    --eval_strategy steps \
+    --eval_steps 500 \
+    --per_device_eval_batch_size 1 \
+    --deepspeed cache/ds_z2_config.json
 ```
 
+配置yaml檔
 
 ```yaml
-version: '3.8'
+compute_environment: LOCAL_MACHINE
 
-services:
-  llama-factory:
-    image: llama-factory:v0.00 # 修改为编译出来的 docker image 名称/版本
-    container_name: llama_factory # container 名称
-    volumes:
-      - C:\WorkSpace\LLaMA-Factory\LLaMA-Factory\huggingface:/root/.cache/huggingface/
-      - C:\WorkSpace\LLaMA-Factory\LLaMA-Factory\data:/app/data
-      - C:\WorkSpace\LLaMA-Factory\LLaMA-Factory\output:/app/output
-      - C:\WorkSpace\LLaMA-Factory\LLaMA-Factory\models:/app/models # 映射自己的models目录
-      - C:\WorkSpace\LLaMA-Factory\LLaMA-Factory:/app # 映射自己的models目录
-    environment:
-      - CUDA_VISIBLE_DEVICES=0,1
-      - GRADIO_SERVER_PORT=7864 # webui跑在7864端口上，7860被comfyui占用了
-    ports:
-      - "7864:7864" # webui跑在7864端口上，7860被comfyui占用了
-    ipc: host
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            count: "all"
-            capabilities: [gpu]
-    restart: unless-stopped
+distributed_type: MULTI_GPU
+
+downcast_bf16: 'no'
+
+machine_rank: 0
+
+main_training_function: main
+
+mixed_precision: fp16
+
+gpu_ids: 0,1
+
+num_machines: 1
+
+num_processes: 2
+
+rdzv_backend: static
+
+same_network: true
+
+tpu_env: []`
+
+tpu_use_cluster: false
+
+tpu_use_sudo: false
+
+use_cpu: false
 ```
 
+### 1.8.2. Colab PRO 訓練模型
 
-部署Dockerfile
+按照這個上方的說明，依據執行單元格內的程式即可
 
-```bash
-docker build -t llama-factory:v0.00 .
-```
-
->[!note] 小提示
->因為有安裝pytorch深度學習套件，因此打包較久屬於正常現象
+https://colab.research.google.com/drive/1de24fadzo1dPNOLwkhTzdaNySy82IKsF#scrollTo=u9NrhcllgL_I
 
 
-```bash
-docker-compose up -d
-```
+## 1.9. 完成畫面
 
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181848004.png)
 
-![](https://markweb.idv.tw/uploads/202408191947809.png)
-
-此時，回到Windows的docker desktop，可以看到`llama-factory`已正常啟動
-
-![](https://markweb.idv.tw/uploads/202408191949088.png)
-
-
-## 完成畫面
-
-![](https://markweb.idv.tw/uploads/202408181848004.png)
-
-## 參考資料
+## 1.10. 參考資料
 
  [【LLaMA-Factory】開源語言模型微調專案　方便微調各種大型語言模型｜內建WebUI　方便使用｜內建多種訓練方式讓使用者選擇](https://the-walking-fish.com/p/llama-factory/)
 
@@ -624,3 +720,16 @@ docker-compose up -d
 [使用LLaMA Factory微调LlaMA 3模型](https://help.aliyun.com/zh/pai/use-cases/fine-tune-a-llama-3-model-with-llama-factory)
 
 [LLaMA-Factory Github開源專案中文版README.md](https://github.com/hiyouga/LLaMA-Factory/blob/main/README_zh.md)
+
+[# [【LLMOps】Accelerate & DeepSpeed使用及加速机制剖析](https://www.cnblogs.com/zhouwenyang/p/17851853.html "发布于 2023-12-12 15:06")](https://www.cnblogs.com/zhouwenyang/p/17851853.html)
+
+[LlamaFactory可视化微调大模型 - 参数详解](https://juejin.cn/post/7389650655449661478)
+## 1.11. 常見問題
+
+>[!warning] GPU內存爆掉
+> 1. 原因：因為 LLaMA-Factory 在導出時，會合併 LoRa 權重，這個步驟會需要將整個模型載入到記憶體中，所以免費版的 Colab、地端主機(GPU記憶體不夠大的)基本上一定會爆系統記憶體，實測至少在導出過程會吃到12GB~13GB的記憶體
+> 2. 這幾天測試的方法有：
+> * 使用經過切片量化的模型(4bit、8bit) →無效
+> * 使用Accerlerate&DeepSpeed進行多卡部署→無效
+> * 參考[LlamaFactory可视化微调大模型 - 参数详解](https://juejin.cn/post/7389650655449661478)微調超參數→無效
+> * 使用colab pro實測→OK(但大量資料訓練不確定)
