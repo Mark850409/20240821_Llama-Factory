@@ -69,7 +69,8 @@ pip install torch==1.13.1 torchvision torchaudio --extra-index-url https://downl
 ```
 
 
->[!warning] 如何驗證目前是CPU還是GPU版本呢?
+>[!WARNING] 
+> 如何驗證目前是CPU還是GPU版本呢?
 > 1. 這邊要注意一下，我搞了好久，原來我安裝的是`CPU`版本，不是`GPU`版本，請注意命令一定要加上`--extra-index-url`
 > 2. 請進入到專案的虛擬環境目錄下，輸入`python`
 > 3. 接著按照底下語法逐行執行，並確認`CUDA available`是否為`true`
@@ -111,7 +112,7 @@ python .\src\webui.py
 
 ![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181847482.png)
 
->[!note] 小提示
+>[!NOTE]
 >如果希望webui可以吃顯卡效能，請用下列這種方式啟動
 >CUDA_VISIBLE_DEVICES=0,1表示兩張顯卡(當然你也可以指定單張顯卡)
 
@@ -176,7 +177,7 @@ services:
 docker build -t llama-factory:v0.00 .
 ```
 
->[!note] 小提示
+>[!NOTE]
 >因為有安裝pytorch深度學習套件，因此打包較久屬於正常現象
 
 
@@ -197,7 +198,7 @@ docker-compose up -d
 作者在專案的 `data` 資料夾內有提供[資料集的格式](https://github.com/hiyouga/LLaMA-Factory/blob/main/data/README_zh.md)，我們需要按照這個格式，才能讓我們自己準備的訓練資料，能夠被用來訓練。
 
 
->[!note] 小提示
+>[!NOTE]
 > 因為我不確定其他資料集要怎麼用，就還是照網站上說得先用Alpaca 格式
 
 
@@ -543,7 +544,8 @@ python excel_to_dataset.py . mistral_dataset.json
 
 ![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192104771.png)
 
->[!note] 參數設定
+>[!NOTE]
+>  參數設定
 >* 請輸入一個`token name`
 >* `permission`我目前都全開
 >* 請注意點擊`Create token`時一定要將token保存下來，因為`畫面關掉`就`不會再出現`了，想要再取得token就要`重新生成`
@@ -564,7 +566,8 @@ python excel_to_dataset.py . mistral_dataset.json
 ![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181926765.png)
 
 
->[!error] 訓練時出現RuntimeError: unmatched '}' in format string
+>[!ERROR] 
+> 訓練時出現RuntimeError: unmatched '}' in format string
 >目前這個方案無解，請改用`docker`方式部署再來訓練
 
 #### 1.8.1.3. 模型參數配置
@@ -617,7 +620,8 @@ python excel_to_dataset.py . mistral_dataset.json
 
 請開啟webui介面，調整好超參數後，點擊`預覽命令`生成指令
 
->[!note] 參數設定
+>[!NOTE] 
+> 參數設定
 > * 要改掉的只有`第一行`，請加上accelerate launch --config_file default_config.yaml src/train.py
 > * yaml檔請將`gpu_ids: 1,3`改成實際顯卡的ID，例如我這邊設`0,1`
 
@@ -726,7 +730,8 @@ https://colab.research.google.com/drive/1de24fadzo1dPNOLwkhTzdaNySy82IKsF#scroll
 [LlamaFactory可视化微调大模型 - 参数详解](https://juejin.cn/post/7389650655449661478)
 ## 1.11. 常見問題
 
->[!warning] GPU內存爆掉
+>[!WARNING] 
+> GPU內存爆掉
 > 1. 原因：因為 LLaMA-Factory 在導出時，會合併 LoRa 權重，這個步驟會需要將整個模型載入到記憶體中，所以免費版的 Colab、地端主機(GPU記憶體不夠大的)基本上一定會爆系統記憶體，實測至少在導出過程會吃到12GB~13GB的記憶體
 > 2. 這幾天測試的方法有：
 > * 使用經過切片量化的模型(4bit、8bit) →無效
