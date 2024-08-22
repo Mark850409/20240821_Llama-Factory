@@ -566,7 +566,7 @@ python excel_to_dataset.py . mistral_dataset.json
 ![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181926765.png)
 
 
->[!ERROR] 
+>[!Caution] 
 > 訓練時出現RuntimeError: unmatched '}' in format string
 >目前這個方案無解，請改用`docker`方式部署再來訓練
 
