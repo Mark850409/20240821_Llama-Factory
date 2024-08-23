@@ -32,9 +32,17 @@
       - [1.8.1.3. 模型參數配置](#1813-模型參數配置)
       - [1.8.1.4. 使用多卡訓練](#1814-使用多卡訓練)
     - [1.8.2. Colab PRO 訓練模型](#182-colab-pro-訓練模型)
+    - [1.8.3. 模型導出與轉檔匯入至Ollama平台進行測試](#183-模型導出與轉檔匯入至ollama平台進行測試)
+      - [1.8.3.1. 使用LLama-Factory WebUI介面進行模型導出](#1831-使用llama-factory-webui介面進行模型導出)
+      - [1.8.3.2. 安裝llama.cpp](#1832-安裝llamacpp)
+      - [1.8.3.3. 進行編譯](#1833-進行編譯)
+      - [1.8.3.4. 執行模型轉檔](#1834-執行模型轉檔)
+      - [1.8.3.5. **量化模型：使用 llama.cpp 來進行量化模型**](#1835-量化模型使用-llamacpp-來進行量化模型)
+      - [1.8.3.6. 執行模型`導入Ollama`](#1836-執行模型導入ollama)
   - [1.9. 完成畫面](#19-完成畫面)
   - [1.10. 參考資料](#110-參考資料)
   - [1.11. 常見問題](#111-常見問題)
+
 
 ## 1.3. 操作步驟
 
@@ -69,8 +77,7 @@ pip install torch==1.13.1 torchvision torchaudio --extra-index-url https://downl
 ```
 
 
->[!WARNING] 
-> 如何驗證目前是CPU還是GPU版本呢?
+>[!warning] 如何驗證目前是CPU還是GPU版本呢?
 > 1. 這邊要注意一下，我搞了好久，原來我安裝的是`CPU`版本，不是`GPU`版本，請注意命令一定要加上`--extra-index-url`
 > 2. 請進入到專案的虛擬環境目錄下，輸入`python`
 > 3. 接著按照底下語法逐行執行，並確認`CUDA available`是否為`true`
@@ -112,7 +119,7 @@ python .\src\webui.py
 
 ![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181847482.png)
 
->[!NOTE]
+>[!NOTE] 小提示
 >如果希望webui可以吃顯卡效能，請用下列這種方式啟動
 >CUDA_VISIBLE_DEVICES=0,1表示兩張顯卡(當然你也可以指定單張顯卡)
 
@@ -177,7 +184,7 @@ services:
 docker build -t llama-factory:v0.00 .
 ```
 
->[!NOTE]
+>[!NOTE] 小提示
 >因為有安裝pytorch深度學習套件，因此打包較久屬於正常現象
 
 
@@ -198,7 +205,7 @@ docker-compose up -d
 作者在專案的 `data` 資料夾內有提供[資料集的格式](https://github.com/hiyouga/LLaMA-Factory/blob/main/data/README_zh.md)，我們需要按照這個格式，才能讓我們自己準備的訓練資料，能夠被用來訓練。
 
 
->[!NOTE]
+>[!NOTE] 小提示
 > 因為我不確定其他資料集要怎麼用，就還是照網站上說得先用Alpaca 格式
 
 
@@ -544,8 +551,7 @@ python excel_to_dataset.py . mistral_dataset.json
 
 ![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192104771.png)
 
->[!NOTE]
->  參數設定
+>[!NOTE] 參數設定
 >* 請輸入一個`token name`
 >* `permission`我目前都全開
 >* 請注意點擊`Create token`時一定要將token保存下來，因為`畫面關掉`就`不會再出現`了，想要再取得token就要`重新生成`
@@ -566,8 +572,7 @@ python excel_to_dataset.py . mistral_dataset.json
 ![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181926765.png)
 
 
->[!Caution] 
-> 訓練時出現RuntimeError: unmatched '}' in format string
+>[!WARNING] 訓練時出現RuntimeError: unmatched '}' in format string
 >目前這個方案無解，請改用`docker`方式部署再來訓練
 
 #### 1.8.1.3. 模型參數配置
@@ -620,8 +625,7 @@ python excel_to_dataset.py . mistral_dataset.json
 
 請開啟webui介面，調整好超參數後，點擊`預覽命令`生成指令
 
->[!NOTE] 
-> 參數設定
+>[!NOTE] 參數設定
 > * 要改掉的只有`第一行`，請加上accelerate launch --config_file default_config.yaml src/train.py
 > * yaml檔請將`gpu_ids: 1,3`改成實際顯卡的ID，例如我這邊設`0,1`
 
@@ -706,10 +710,233 @@ use_cpu: false
 
 ### 1.8.2. Colab PRO 訓練模型
 
-按照這個上方的說明，依據執行單元格內的程式即可
+Colab連結
 
 https://colab.research.google.com/drive/1de24fadzo1dPNOLwkhTzdaNySy82IKsF#scrollTo=u9NrhcllgL_I
 
+關鍵程式碼片段-上傳HuggingFace HUB倉庫
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408221941700.png)
+
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408221943326.png)
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408221943914.png)
+
+關鍵程式碼片段-保存到GoogleDrive
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408221944705.png)
+
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408221946839.png)
+
+導出結果-GoogleDrive
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408221950556.png)
+
+導出結果-HuggingFace HUB
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408221951797.png)
+
+
+
+### 1.8.3. 模型導出與轉檔匯入至Ollama平台進行測試
+
+#### 1.8.3.1. 使用LLama-Factory WebUI介面進行模型導出
+
+1. 點擊Expot
+2. 導出設備選擇CPU
+3. 導出目錄這邊設定`models`
+4. HF Hub ID(這是你在HuggingFaceHUB上面若有註冊帳號且建立了倉庫才要填)
+5. 點擊開始導出
+6. 直到顯示模型導出完成，如下圖
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408222002368.png)
+
+
+進入`models`目錄，就看到自己的模型成功被導出囉
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408222005004.png)
+
+#### 1.8.3.2. 安裝llama.cpp
+
+```bash
+git clone https://github.com/ggerganov/llama.cpp
+cd llama.cpp
+pip install -r requirements.txt
+```
+
+#### 1.8.3.3. 進行編譯
+
+```
+make
+```
+
+>[!NOTE] 
+>* 若這一步編譯失敗，請確認是否有安裝`w64devkit`
+>* 下載之後請解壓縮到你想要放的地方，同時將環境變數指到`bin目錄`即可
+
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408222356545.png)
+
+#### 1.8.3.4. 執行模型轉檔
+
+```python
+python convert_hf_to_gguf.py [你的模型導出目錄]
+```
+
+看到此畫面表示成功轉檔囉
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408222009481.png)
+
+這裡可以看到轉好的`gguf`檔案，這邊看似有`16GB`，原始檔未做量化檔案會很大，接下來步驟會做微調
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408222012143.png)
+
+#### 1.8.3.5. **量化模型：使用 llama.cpp 來進行量化模型**
+
+```powershell
+cd llama.cpp  
+llama-quantize C:\\WorkSpace\\LLaMA-Factory\\LLaMA-Factory\\models\\Llama3-8B-Chinese-Chat-F16.gguf  C:\\WorkSpace\\LLaMA-Factory\\LLaMA-Factory\\models\\Llama3-8B-Chinese-Chat-Q4.gguf q4_k_m
+```
+
+>[!NOTE] 
+>* 這邊注意一下，新版的腳本名稱為`llama-quantize`，不是`quantize`
+
+看到此畫面表示模型量化成功
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408230006081.png)
+
+
+接著到`models`目錄，可以發現經過量化後的模型只有`4.58GB`，很明顯比原來的`16GB`小很多
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408230007764.png)
+
+
+#### 1.8.3.6. 執行模型`導入Ollama`
+
+請在`C:\WorkSpace\ollama\data`建立`Modelfile`
+
+```Dockerfile
+# FROM 指定 GGUF 文件的路径
+FROM Llama3-8B-Chinese-Chat-Q4.gguf
+
+PARAMETER temperature 0.7
+PARAMETER top_k 50
+PARAMETER top_p 0.9
+PARAMETER repeat_last_n 64
+PARAMETER repeat_penalty 1.1
+PARAMETER num_ctx 2048
+PARAMETER stop "<|im_start|>"
+PARAMETER stop "<|im_end|>"
+
+TEMPLATE """
+<|im_start|>system
+{{ .System }}<|im_end|>
+<|im_start|>user
+{{ .Prompt }}<|im_end|>
+<|im_start|>assistant
+"""
+
+SYSTEM """
+你現在是一位經驗豐富的塔羅牌師，擁有數十年的解牌經驗和深厚的直覺洞察力。請仔細查看模型訓練的數據集，其中包含100個不同的牌組（Spread Card Composition）。
+你的任務是：
+1. 仔細閱讀每個牌組中塔羅牌的名稱，以及欄位 Spread Card Composition其正位和逆位的含義。
+2. 針對"Overall Love Spread Meaning"欄位，運用你豐富的塔羅經驗和洞察力，重新進行深入解讀。這個解讀應該：
+   - 超越原文的表面含義，挖掘更深層的洞見
+   - 融入你作為資深塔羅牌師的獨特見解
+   - 加入原文未提及但相關的解說，豐富整體解讀
+   - 考慮牌陣中各張牌之間的相互關係和能量流動
+   - 提供更具體、實用的建議給尋求指引的人
+3. 從Combination Number 3530025開始，依次解讀至3530050，共25組牌陣。
+4. 每組解讀應包含：
+   - 牌陣編號(註明)
+   - 牌組組成(註明)
+   - 你的詳細解讀（包含實用的建議與解讀共約200字,共分2段解讀與建議）
+5. 在解讀時，請考慮以下幾點：
+   - 牌陣中各張牌的位置和相互關係
+   - 正逆位的影響
+   - 實用的建議(與牌面相近要有意思區隔的建議)或行動指南
+6. 文字呈現範例如下,請依照此格式輸出
+牌陣編號: 3530001
+牌組組成: 權杖八 (正位)、寶劍八 (逆位)、寶劍王后 (正位)
+詳細解讀：
+權杖八的正位顯示你目前的感情狀態充滿了快速且正面的變化，這與寶劍八逆位的釋放束縛相呼應，暗示著你們正在或即將從一段困境中解脫。這兩張牌共同表示你們的關係將由束縛中解放，進而進入更自由、開明的階段。寶劍王后的理智與洞察力將在這過程中起到關鍵作用，使你們能在情感上更加成熟和理性。
+建議與指引：
+建議你們利用這段契機重新審視彼此的需求與目標，並以開放的態度迎接新的開始。實際上，權杖八暗示旅行或變化，或許也可以考慮來一段假期，讓雙方有更多時間感受彼此的存在。寶劍王后提醒你們在溝通中要保持冷靜和理智，並互相尊重對方的意見。
+請以溫和、富有洞察力且鼓舞人心的語調進行解讀，就像你正在為一位真實的來訪者進行面對面的塔羅占卜。
+現在，請開始你的解讀。謝謝。
+"""
+
+LICENSE """
+此模型基於原始的 Llama 3 模型進行了微調。使用時請遵守 Llama 3 的授權條款。
+本模型僅供個人使用和研究目的，不得用於商業用途。
+使用者應對使用本模型所產生的結果負責。
+"""
+```
+
+
+>[!NOTE] 
+>* 因為我用docker架設Ollama環境，mount的目錄是`C:\WorkSpace\ollama\data`，還是要依實際需求適時做調整
+>* 若Llama3-8B-Chinese-Chat-Q4.gguf檔案不指定路徑的話，要和Modelfile放在同一層，否則會找不到喔
+>* 請注意，這裡的`temperature`一定要設定，否則模型會開始`胡言亂語`停不下來
+
+進入`Docker容器`內部，輸入以下指令
+
+```Dockerfile
+ollama create custom_Llama3-8B-Chinese-Chat-Q4 -f Modelfile
+```
+
+這樣就會開始建置`Ollama模型`了，請稍等...
+
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408230013771.png)
+
+
+模型`建置成功`，來確認一下
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408230014428.png)
+
+查詢目前`模型清單`，輸入以下指令
+
+```bash
+ollama list
+```
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408230014658.png)
+
+執行模型，輸入以下指令
+
+```bash
+ollama run custom_Llama3-8B-q4_k_m:latest
+```
+
+
+這個步驟就可以使用指令與模型開始對話
+
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408231945367.png)
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408231946315.png)
+
+
+>[!NOTE] 
+>* 這邊注意一下，因為`ollama web ui`和指令執行介面的`格式可能有所不同`，所以方才雖然在`ModelFile`將`系統提示詞`打包進去，但這邊似乎不起作用，因此請在這邊再次設定
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408231948239.png)
+
+設定好請點擊`儲存並更新`
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408231950716.png)
+
+
+開始與AI對話，這邊可以注意，有設定提示詞才能吃到目前賦予AI的角色
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408231952881.png)
+
+沒有經過訓練的模型，那就是照原先設定好的進行回覆
+
+![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408231954643.png)
 
 ## 1.9. 完成畫面
 
@@ -728,13 +955,14 @@ https://colab.research.google.com/drive/1de24fadzo1dPNOLwkhTzdaNySy82IKsF#scroll
 [# [【LLMOps】Accelerate & DeepSpeed使用及加速机制剖析](https://www.cnblogs.com/zhouwenyang/p/17851853.html "发布于 2023-12-12 15:06")](https://www.cnblogs.com/zhouwenyang/p/17851853.html)
 
 [LlamaFactory可视化微调大模型 - 参数详解](https://juejin.cn/post/7389650655449661478)
+
+[# 使用llama.cpp**將HuggingFace模型轉換為GGUF及進行量化-以taide-b.11.0.0模型為例-**部署LM-Studio](https://medium.com/@zhanyanjiework/%E5%B0%87huggingface%E6%A8%A1%E5%9E%8B%E8%BD%89%E6%8F%9B%E7%82%BAgguf%E5%8F%8A%E4%BD%BF%E7%94%A8llama-cpp%E9%80%B2%E8%A1%8C%E9%87%8F%E5%8C%96-%E4%BB%A5taide-b-11-0-0%E6%A8%A1%E5%9E%8B%E7%82%BA%E4%BE%8B-%E9%83%A8%E7%BD%B2lm-studio-366bc4bcb690)
 ## 1.11. 常見問題
 
->[!WARNING] 
-> GPU內存爆掉
+>[!WARNING] GPU內存爆掉
 > 1. 原因：因為 LLaMA-Factory 在導出時，會合併 LoRa 權重，這個步驟會需要將整個模型載入到記憶體中，所以免費版的 Colab、地端主機(GPU記憶體不夠大的)基本上一定會爆系統記憶體，實測至少在導出過程會吃到12GB~13GB的記憶體
 > 2. 這幾天測試的方法有：
 > * 使用經過切片量化的模型(4bit、8bit) →無效
 > * 使用Accerlerate&DeepSpeed進行多卡部署→無效
 > * 參考[LlamaFactory可视化微调大模型 - 参数详解](https://juejin.cn/post/7389650655449661478)微調超參數→無效
-> * 使用colab pro實測→OK(但大量資料訓練不確定)
+> * 使用colab pro實測→OK(1000筆資料訓練OK，但導出即使是PRO版一樣爆記憶體)
