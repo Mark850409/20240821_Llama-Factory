@@ -77,7 +77,8 @@ pip install torch==1.13.1 torchvision torchaudio --extra-index-url https://downl
 ```
 
 
->[!warning] 如何驗證目前是CPU還是GPU版本呢?
+> [!WARNING]
+> 如何驗證目前是CPU還是GPU版本呢?
 > 1. 這邊要注意一下，我搞了好久，原來我安裝的是`CPU`版本，不是`GPU`版本，請注意命令一定要加上`--extra-index-url`
 > 2. 請進入到專案的虛擬環境目錄下，輸入`python`
 > 3. 接著按照底下語法逐行執行，並確認`CUDA available`是否為`true`
@@ -959,7 +960,8 @@ ollama run custom_Llama3-8B-q4_k_m:latest
 [# 使用llama.cpp**將HuggingFace模型轉換為GGUF及進行量化-以taide-b.11.0.0模型為例-**部署LM-Studio](https://medium.com/@zhanyanjiework/%E5%B0%87huggingface%E6%A8%A1%E5%9E%8B%E8%BD%89%E6%8F%9B%E7%82%BAgguf%E5%8F%8A%E4%BD%BF%E7%94%A8llama-cpp%E9%80%B2%E8%A1%8C%E9%87%8F%E5%8C%96-%E4%BB%A5taide-b-11-0-0%E6%A8%A1%E5%9E%8B%E7%82%BA%E4%BE%8B-%E9%83%A8%E7%BD%B2lm-studio-366bc4bcb690)
 ## 1.11. 常見問題
 
->[!WARNING] GPU內存爆掉
+> [!WARNING]
+> GPU內存爆掉
 > 1. 原因：因為 LLaMA-Factory 在導出時，會合併 LoRa 權重，這個步驟會需要將整個模型載入到記憶體中，所以免費版的 Colab、地端主機(GPU記憶體不夠大的)基本上一定會爆系統記憶體，實測至少在導出過程會吃到12GB~13GB的記憶體
 > 2. 這幾天測試的方法有：
 > * 使用經過切片量化的模型(4bit、8bit) →無效
