@@ -120,7 +120,7 @@ python .\src\webui.py
 
 ![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408181847482.png)
 
->[!NOTE] 小提示
+>[!NOTE]
 >如果希望webui可以吃顯卡效能，請用下列這種方式啟動
 >CUDA_VISIBLE_DEVICES=0,1表示兩張顯卡(當然你也可以指定單張顯卡)
 
@@ -185,7 +185,7 @@ services:
 docker build -t llama-factory:v0.00 .
 ```
 
->[!NOTE] 小提示
+>[!NOTE]
 >因為有安裝pytorch深度學習套件，因此打包較久屬於正常現象
 
 
@@ -206,7 +206,7 @@ docker-compose up -d
 作者在專案的 `data` 資料夾內有提供[資料集的格式](https://github.com/hiyouga/LLaMA-Factory/blob/main/data/README_zh.md)，我們需要按照這個格式，才能讓我們自己準備的訓練資料，能夠被用來訓練。
 
 
->[!NOTE] 小提示
+>[!NOTE]
 > 因為我不確定其他資料集要怎麼用，就還是照網站上說得先用Alpaca 格式
 
 
@@ -552,7 +552,8 @@ python excel_to_dataset.py . mistral_dataset.json
 
 ![](https://raw.githubusercontent.com/Mark850409/20240821_Llama-Factory/master/images/202408192104771.png)
 
->[!NOTE] 參數設定
+>[!NOTE]
+> 參數設定
 >* 請輸入一個`token name`
 >* `permission`我目前都全開
 >* 請注意點擊`Create token`時一定要將token保存下來，因為`畫面關掉`就`不會再出現`了，想要再取得token就要`重新生成`
@@ -626,7 +627,8 @@ python excel_to_dataset.py . mistral_dataset.json
 
 請開啟webui介面，調整好超參數後，點擊`預覽命令`生成指令
 
->[!NOTE] 參數設定
+>[!NOTE]
+> 參數設定
 > * 要改掉的只有`第一行`，請加上accelerate launch --config_file default_config.yaml src/train.py
 > * yaml檔請將`gpu_ids: 1,3`改成實際顯卡的ID，例如我這邊設`0,1`
 
